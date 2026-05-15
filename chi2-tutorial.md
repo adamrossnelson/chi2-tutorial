@@ -174,9 +174,6 @@ Walking the function line by line:
 
 Hold onto how this feels. Much simpler code will do the same jobs in Step 6.
 
-Markdown cell:
-
-```markdown
 > **Aside — f-strings**
 >
 > Each `print` in Steps 2 and 3 begins with `f"..."`. That `f` prefix marks an f-string (formatted string). Within the context of an f-string, any Python expression inside the squiggly brackets `{...}` is evaluated and dropped into the string in place. Compare:
@@ -188,7 +185,6 @@ Markdown cell:
 > The braces accept any expression, not just a bare variable name which is why `{sum(red_books)}` and `{sum(row_totals_loop(observed))}` were valid in the code you just ran. Without the `f`, `"{x}"` is three literal characters; the prefix is what turns substitution on. 
 >
 > Later, when learning more about f-strings, you will also see how a colon inside the braces introduces a format specification. For example, `f"{p_value:.4f}"` rounds to four decimal places, which will be useful for the p-value in Step 12. You will see f-strings again, they are the standard way to build strings everywhere in modern Python.
-```
 
 ---
 
@@ -616,8 +612,7 @@ Code cell:
 # Define a 2x2 table with a strong pattern
 strong_pattern = [
     [30, 10],
-    [10, 30],
-]
+    [10, 30]]
 
 # Run the chi-square test
 chi_square_test(strong_pattern)
@@ -635,8 +630,7 @@ Code cell:
 # Define a 2x2 table where observed equals expected
 flat = [       # No relationship between rows + columns
     [10, 10],
-    [10, 10],
-]
+    [10, 10]]
 
 # Run the chi-square test
 chi_square_test(flat)
