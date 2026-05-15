@@ -340,6 +340,12 @@ Why does this recipe make sense? If cover color and genre have nothing to do wit
 A cell where the observed count is much bigger or smaller than this expected count is a potential bit of evidence weighing against the no-relationship assumption.
 ```
 
+> ### New LaTeX Syntax Here
+>
+> LaTeX is a typesetting system commonly used for mathematical and scientific documents. It allows for the creation of complex mathematical expressions and equations. In Jupyter notebooks, LaTeX can be used to display mathematical notation in markdown cells.
+>
+> The `$` and `$$` delimiters are used to delimit LaTeX expressions in markdown cells. Single `$` delimiters are used for inline expressions, while double `$$` delimiters are used for block expressions.
+
 ---
 
 ## Step 8 — Expected matrix with nested `for` loops
@@ -360,7 +366,8 @@ def expected_loop(row_t, col_t, grand):
     for i in range(len(row_t)):
         row = []
         for j in range(len(col_t)):
-            row.append(row_t[i] * col_t[j] / grand)
+            row.append(round(
+                row_t[i] * col_t[j] / grand, 3))
         expected.append(row)
     return expected
 
@@ -399,7 +406,7 @@ Code cell:
 ```python
 # NumPy approach using np.outer
 expected = np.outer(row_t, col_t) / grand
-expected
+expected.round(3)
 ```
 
 You should see a 6×6 NumPy array of floats, all close to 10.
@@ -408,6 +415,7 @@ Walking the line:
 
 - `np.outer(row_t, col_t)` builds a 6×6 array where entry `(i, j)` is `row_t[i] * col_t[j]`.
 - `/ grand` divides every entry of that array by the grand total. Division between an array and a single number applies element-wise without any loop you have to write.
+- `.round(3)` rounds each value to 3 decimal places for cleaner display.
 
 Reading two grids of floats and confirming they match is no fun, so let NumPy do it.
 
@@ -421,8 +429,8 @@ Code cell:
 
 ```python
 # Alternative approach using traditional operators
-expected = (row_t * col_t) / grand
-expected
+expected = (row_t.reshape(-1, 1) * col_t) / grand
+expected.round(3)
 ```
 
 Again, you should see a 6×6 NumPy array of floats, all close to 10 (the results here should match the results from above that used `np.outer`).
@@ -431,7 +439,9 @@ Code cell:
 
 ```python
 # Verify the results match the loop-based approach
-np.allclose(expected, np.array(expected_loop(row_t, col_t, grand)))
+np.allclose(
+    expected.round(3), 
+    np.array(expected_loop(row_t, col_t, grand)))
 ```
 
 You should see `True`.
@@ -459,7 +469,7 @@ Code cell:
 ```python
 # Calculate normalized error matrix
 normalized_error = (observed_arr - expected) ** 2 / expected
-normalized_error
+normalized_error.round(3)
 ```
 
 You should see a 6×6 NumPy array of small non-negative floats.
@@ -495,6 +505,10 @@ print(f"Chi-square statistic: {chi2_stat:.8f}")
 
 You should see a small floating-point number, well under 10. Small is the right answer here. The observed table was built to look close to flat, so the per-cell deviations are tiny and their sum is too.
 
+> ### Compare + Contrast `:.8f` vs `round(3)`
+> 
+> The `:.8f` format specifier is used in f-strings to format a number as a floating-point number with 8 decimal places. The `round(3)` function rounds a number to 3 decimal places. The difference is that `:.8f` is a string formatting operation, while `round(3)` is a mathematical operation. An important implication of useing `round()` is that if the result is assigned back to itself there will be information loss.
+
 ---
 
 ## Step 12 — From the statistic to a p-value
@@ -523,9 +537,9 @@ df = (n_rows - 1) * (n_cols - 1)
 p_value = chi2.sf(chi2_stat, df)
 
 # Print, inspect, evaluate with f-strings
-print("chi-square statistic:", chi2_stat)
-print("degrees of freedom:  ", df)
-print("p-value:             ", p_value)
+print(f"chi-square statistic: {chi2_stat}")
+print(f"degrees of freedom:   {df}")
+print(f"p-value:              {p_value}")
 ```
 
 You should see `df` of `25` and a p-value much higher than `0.05`.
